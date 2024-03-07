@@ -119,6 +119,7 @@ menu:
   home: / || fa fa-home
   archives: /archives/ || fa fa-archive
   tags: /tags/ || fa fa-tags
+  mario: /mario/ || fa fa-mario
   #about: /about/ || fa fa-user
   #categories: /categories/ || fa fa-th
   #schedule: /schedule/ || fa fa-calendar
