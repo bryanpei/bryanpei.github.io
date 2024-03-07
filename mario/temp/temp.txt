@@ -1,0 +1,8 @@
+1. 毕设     done
+2. myo手环  done
+3. 唯医网实习 done
+4. 按键马里奥 done
+5. 坦克动画  pass
+6. 国际象棋  pass
+7. 设计管理  pass
+8. 油泥模型  done
