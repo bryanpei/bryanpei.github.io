@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Pixel Editor</title>
+    <style type="text/css">
+        .grid-container.cell{
+            cursor: cell;
+            line-height: 0;
+            min-height: 1px;
+            width: calc(99.9% * 2/4 - 400px);;
+            /* height: 400px; */
+            margin-left: 300px;
+            margin-top: 20px;
+        }
+
+        .grid-container div{
+            float: left;
+            border: 1px solid #585858;
+            border-width: 0 1px 1px 0;
+        }
+
+    </style>
+    
+</head>
+<body>
+    <div style="margin-left: 300px; margin-top: 100px">
+        Width:&nbsp<input id="width" type="text" style="width: 50px;" value="15">&nbsp&nbspHeight:&nbsp<input id="height" type="text" style="width: 50px;" value="16">&nbsp&nbsp
+        <button id="changeSize" onclick="changeSize()">changeSize</button>
+        
+        <div id="colorPick" class="colorPick" style="width: 25px; height: 25px; background-color: red; float: right; margin-right: 1200px;">
+            <input id="colorValue" type="text" value="#f00" style="margin-left: 30px; width: 60px" onchange="changeColor(getElementById('colorPick'))">
+        </div>
+        <!-- <button id="changeColor" onclick="changeColor()" style="margin-top: 10px;">changeColor</button> -->
+    </div>
+
+    <!-- <div class="center">
+
+    </div> -->
+    <div id="grid-container" class="grid-container cell">
+       
+    </div>
+    <button id="genValue" onclick="genValue()" style="margin-left: 70px;">Generate</button>
+    <div>
+        <textarea name="output" id="output" cols="110" rows="30" style="margin-left: 100px; white-space: nowrap; overflow: scroll"></textarea>
+    </div>
+
+    <script>
+        changeSize();
+
+        function changeSize(){
+            width = parseInt(document.getElementById("width").value);
+            height = document.getElementById("height").value;
+            container = document.getElementById('grid-container');
+            while(container.hasChildNodes()){
+                container.removeChild(container.firstChild);
+            }
+            width_percent = 100 / (width + 1);
+            // width_percent = 1.9;
+            // console.log(width_percent, width);
+            for(var i=0; i < width*height; i++){
+                // child = document.createElement('<div style="width:' + width_percent.toString() + '%; padding-bottom:' + width_percent.toString() + '%; background-color: #333"></div>');
+                child = document.createElement('div');
+                child.setAttribute('style', 'width:' + width_percent.toString() + '%; padding-bottom:' + width_percent.toString() + '%; background-color: #e5e6e8');
+                child.setAttribute('onclick', 'changeColor(this)');
+                child.setAttribute('ondblclick', 'resetColor(this)');
+                // console.log(child);
+                container.appendChild(child);
+            }
+        }
+
+        function changeColor(obj){
+            color = document.getElementById('colorValue').value;
+            obj.style.backgroundColor = color;
+            console.log(color);
+        }
+        
+        function resetColor(obj){
+            color = "#e5e6e8";
+            obj.style.backgroundColor = color;
+        }
+
+        function genValue(){
+            var pixels = document.getElementById('grid-container').childNodes;
+            var max_col = document.getElementById('width').value;
+            var max_row = document.getElementById('height').value;
+            var pixelValues = []
+            for(var i = 0; i < pixels.length; i++){
+                pixel_color = rgb2hex(pixels[i].style.backgroundColor);
+                if(pixel_color == "#e5e6e8"){pixel_color = 0};
+                pixelValues.push(pixel_color);
+            }
+            
+            text = "";
+            var i = 0;
+            for(var row = 0; row < max_row; row++){
+                text += "[";
+                for(var col = 0; col < max_col; col++){
+                    color = "\"" + pixelValues[i] + "\"";
+                    if(col != max_col - 1){color += ", "}
+                    text = text + color;
+                    i += 1
+                }
+                endStr = ["]"]
+                if(row != max_row - 1){endStr += ","}
+                text = text + endStr + "\n"
+            }
+            
+            document.getElementById("output").value = text;
+
+        }
+
+
+        var hexDigits = new Array
+        ("0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"); 
+        //Function to convert rgb color to hex format
+        function rgb2hex(rgb) {
+        rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+        return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+        }
+
+        function hex(x) {
+        return isNaN(x) ? "00" : hexDigits[(x - x % 16) / 16] + hexDigits[x % 16];
+        }
+        
+    </script>
+</body>
+</html>
